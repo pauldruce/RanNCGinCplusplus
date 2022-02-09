@@ -6,7 +6,7 @@
 //
 
 #include "RandomMatrixUtils.h"
-#include <cassert>
+//#include <cassert>
 using namespace arma;
 using namespace std;
 

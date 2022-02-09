@@ -1,8 +1,3 @@
-# Optionally glob, but only for CMake 3.12 or later:
-file(GLOB HEADER_LIST CONFIGURE_DEPENDS
-     "${RandomNCG_SOURCE_DIR}/include/RanNCG/*.h")
-# set(HEADER_LIST "${ModernCMakeExample_SOURCE_DIR}/include/modern/lib.hpp")
-
 add_library(
   RanNCG
   Clifford.cpp

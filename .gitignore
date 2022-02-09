@@ -38,4 +38,3 @@ build/*
 build-xcode/*
 cmake-*
 output/*
-dependencies/*
