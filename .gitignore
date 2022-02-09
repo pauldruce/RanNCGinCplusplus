@@ -38,5 +38,3 @@ build/*
 build-xcode/*
 cmake-*
 output/*
-dependencies/*
-dependencies/cppitertools
