@@ -1,3 +1,0 @@
-[submodule "dependencies/cppitertools"]
-	path = dependencies/cppitertools
-	url = https://github.com/ryanhaining/cppitertools/tree/master
