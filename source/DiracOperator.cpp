@@ -40,9 +40,11 @@ DiracOperator::DiracOperator(Clifford &clifford_module, int &N)
    gamma_H_pairs_new = gamma_H_pairs;
    gamma_L_pairs_new = gamma_L_pairs;
 
-   // Set the inital matrix representation of the Dirac to be zero.
+   // Set the initial matrix representation of the Dirac to be zero.
    this->dirac_op_mat = zeros<cx_mat>(dirac_dim, dirac_dim);
    random_dirac(1.0);
+
+//this->dirac_op_mat = eye<cx_mat>(dirac_dim, dirac_dim);
 }
 
 void DiracOperator::random_dirac(double step_size)
