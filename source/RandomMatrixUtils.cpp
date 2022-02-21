@@ -58,8 +58,8 @@ cx_mat anticomm(cx_mat& M)
 
 cx_mat random_complex(int& N)
 {
-   mat A(N,N,fill::randn);
-   mat B(N,N,fill::randn);
+   mat A(N,N,fill::randu);
+   mat B(N,N,fill::randu);
    
    // Need elements between [-1,1] and randu gives values between [0,1]
    A = 2*A - 1;
