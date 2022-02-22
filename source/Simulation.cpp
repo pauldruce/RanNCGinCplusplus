@@ -11,7 +11,7 @@
 using namespace arma;
 using namespace std;
 
-Simulation::Simulation(DiracOperator dirac_operator, SimulationData &simData)
+Simulation::Simulation(const DiracOperator & dirac_operator, SimulationData &simData)
       : D(dirac_operator),
         proposed_D(dirac_operator), sim_data(simData)
 {
@@ -27,7 +27,7 @@ double Simulation::run_simulation(int chain_length, double step_size, bool recor
    // Reset the acceptance rate values;
    this->accepted_moves = 0;
    this->num_moves = 0;
-   this->acceptance_rate = 0;
+//   this->acceptance_rate = 0;
 
    // Get the initial action value for comparison later.
    action_val = Action(this->D);
@@ -80,16 +80,20 @@ void Simulation::Metropolis()
    }
 }
 
-double Simulation::Action(DiracOperator &dirac)
+double Simulation::Action(DiracOperator &dirac) const
 {
-   // Currently using D matrix. Need to migrate to H and L matrices.
-   cx_mat &D = dirac.as_matrix();
-   cx_mat D2 = D * D;
-   D2.clean(1e-10);
+   // Currently, using D matrix. Need to migrate to H and L matrices.
+   cx_mat D_mat = dirac.as_matrix();
+   cx_mat D2 = D_mat * D_mat;
 
-   cx_mat D4 = D * D * D * D;
-   D4.clean(1e-10);
+   cx_mat D4 = D2*D2;
 
    cx_double action = sim_data.g2 * trace(D2) + sim_data.g4 * trace(D4);
    return action.real();
+}
+
+void Simulation::reset_dirac()
+{
+   this->D.reset_dirac();
+   this->action_val = Action(D);
 }

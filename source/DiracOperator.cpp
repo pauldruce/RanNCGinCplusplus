@@ -47,6 +47,13 @@ DiracOperator::DiracOperator(Clifford &clifford_module, int &N)
 //this->dirac_op_mat = eye<cx_mat>(dirac_dim, dirac_dim);
 }
 
+void DiracOperator::reset_dirac()
+{
+   // Set the initial matrix representation of the Dirac to be zero.
+   this->dirac_op_mat = zeros<cx_mat>(dirac_dim, dirac_dim);
+   random_dirac(1.0);
+}
+
 void DiracOperator::random_dirac(double step_size)
 {
    dirac_op_mat.zeros();

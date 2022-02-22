@@ -51,6 +51,7 @@ public:
    inline std::vector<arma::cx_mat> &get_odd_gamma_products() { return odd_gamma_products; };
    inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> get_anti_herm_pairs() { return gamma_L_pairs; };
    inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> get_herm_pairs() { return gamma_H_pairs; };
+   void reset_dirac();
    // inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> get_gamma_HL_pairs(){return gamma_HL_pairs;};
 };
 
