@@ -1,13 +1,12 @@
 #include <iostream>
 #include <armadillo>
 #include <string>
+#include <cassert>
 
 #include "Clifford.h"
 #include "DiracOperator.h"
 #include "Simulation.h"
 #include "SimulationData.hpp"
-#include <cassert>
-#include <assert.h>
 
 using namespace arma;
 namespace fs = std::filesystem;
@@ -33,7 +32,7 @@ int main()
    double g2_step = -0.04;
 
    // Set simulation parameters for initial stage of finding an appropriate step size.
-   int chain_length = 500;
+   int chain_length = 200;
    int num_runs_before_reset = 1000;
    bool record_action = false;
    double step_size = 0.01;
@@ -80,8 +79,9 @@ int main()
                 sim_data.acceptance_rate < acceptance_rate_lower_bound ||
                 num_times_acceptance_ratio_is_okay < 10)
          {
-            if (num_tempering_runs % num_runs_before_reset == 0) // This is equivalent to 2000*500 = 1,000,000 runs.
+            if (num_tempering_runs % num_runs_before_reset == 0 or sim_data.step_size < 1e-12)
             {
+               // This occurs if there have been 2000*500 = 1,000,000 runs or if the step size gets too small.
                sim_data.step_size = step_size;
                simulation.reset_dirac();
             }
@@ -89,7 +89,6 @@ int main()
             sim_data.step_size = std::abs(sim_data.step_size);
 
             assert(sim_data.step_size > 1e-12);
-            //            step_size_diff = 0.1 * sim_data.step_size;
 
             sim_data.acceptance_rate = simulation.run_simulation(chain_length, sim_data.step_size, record_action);
             sim_data.action_value = simulation.get_S();
@@ -101,18 +100,10 @@ int main()
                          << ", acceptance ratio = " << sim_data.acceptance_rate << std::endl;
             }
 
-            // += weightA * (-0.5 + ar / (n1))
-
             if (sim_data.acceptance_rate > acceptance_rate_upper_bound or sim_data.acceptance_rate < acceptance_rate_lower_bound)
             {
                sim_data.step_size += ((sim_data.acceptance_rate - 0.5) * sim_data.step_size);
-               //               sim_data.step_size += (step_size_diff + minimum_step_size);
             }
-            //            else if (sim_data.acceptance_rate < acceptance_rate_lower_bound)
-            //            {
-            //               sim_data.step_size += ((sim_data.acceptance_rate - 0.5)*sim_data.step_size);
-            ////                     sim_data.step_size -= (step_size_diff +minimum_step_size);
-            //            }
             else
             {
                num_times_acceptance_ratio_is_okay++;
@@ -120,6 +111,7 @@ int main()
 
             num_tempering_runs++;
          }
+
          printf("System has found appropriate step size for configuration.\n");
          printf("Outputting step size value for configuration.\n");
          sim_data.print_step_size();
@@ -137,6 +129,6 @@ int main()
          }
       }
    }
-   //   }
+
    return 0;
 }
