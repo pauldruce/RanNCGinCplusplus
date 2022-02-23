@@ -38,16 +38,15 @@ private:
 
 public:
    DiracOperator(Clifford &clifford_module, int &N);
-   void update();
-   // Returns a random Dirac operator with entries uniformaly sampled between [-1,1] + i[-1,1].
+   //   void update();
+   // Returns a random Dirac operator with entries uniformly sampled between [-1,1] + i[-1,1].
    void random_dirac(double step_size);
 
    DiracOperator &operator+=(DiracOperator &D_right);
-   void add(arma::cx_mat &delta_D, std::vector<std::pair<arma::cx_mat, arma::cx_mat>> gamma_HL_pairs);
 
-   inline int get_dirac_dim() { return dirac_dim; };
+   //   inline int get_dirac_dim() { return dirac_dim; };
    inline arma::cx_mat &as_matrix() { return dirac_op_mat; };
-   inline int get_matrix_size() { return matrix_size; };
+   [[nodiscard]] inline int get_matrix_size() const { return matrix_size; };
    inline std::vector<arma::cx_mat> &get_odd_gamma_products() { return odd_gamma_products; };
    inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> get_anti_herm_pairs() { return gamma_L_pairs; };
    inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> get_herm_pairs() { return gamma_H_pairs; };

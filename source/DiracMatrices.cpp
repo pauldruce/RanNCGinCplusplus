@@ -80,7 +80,7 @@ void DiracMatrices::introduce()
    // Print out the generators
    cout << "The generators are:";
    int i = 0;
-   for (auto gen : generators)
+   for (const auto &gen : generators)
    {
       // Starts the gamma label from zero
       cout << "Gamma_" << i << "= " << endl;

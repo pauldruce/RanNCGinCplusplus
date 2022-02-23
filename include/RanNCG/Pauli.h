@@ -6,7 +6,7 @@ class Pauli : protected Clifford
 {
    arma::cx_mat x, y, z;
    Pauli();
-   
+
 public:
    void introduce() override;
 };

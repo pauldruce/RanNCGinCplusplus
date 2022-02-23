@@ -20,7 +20,7 @@ DiracOperator::DiracOperator(Clifford &clifford_module, int &N)
    generate_odd_gamma_products();
 
    // Initialise the gamma-H pairs and gamma-L pairs.
-   for (auto prod : odd_gamma_products)
+   for (const auto &prod : odd_gamma_products)
    {
       cx_mat zero_mat(matrix_size, matrix_size, fill::zeros);
       if (prod.is_hermitian()) // Hermitian
@@ -44,7 +44,7 @@ DiracOperator::DiracOperator(Clifford &clifford_module, int &N)
    this->dirac_op_mat = zeros<cx_mat>(dirac_dim, dirac_dim);
    random_dirac(1.0);
 
-//this->dirac_op_mat = eye<cx_mat>(dirac_dim, dirac_dim);
+   // this->dirac_op_mat = eye<cx_mat>(dirac_dim, dirac_dim);
 }
 
 void DiracOperator::reset_dirac()
@@ -94,12 +94,12 @@ DiracOperator &DiracOperator::operator+=(DiracOperator &D_right)
 
    if (this->matrix_size != D_right.matrix_size)
    {
-      throw "ERROR: Matrix sizes do not match.";
+      throw std::runtime_error("ERROR: Matrix sizes do not match.");
    }
 
    if (this->clifford_module.type != D_right.clifford_module.type)
    {
-      throw "ERROR: Dirac Operators of different types!";
+      throw std::runtime_error("ERROR: Dirac Operators of different types!");
    }
 
    auto lhs_herm_pairs = this->get_herm_pairs();
@@ -141,7 +141,7 @@ void DiracOperator::generate_odd_gamma_products()
          if (comb.size() > 1)
          {
             cx_mat product = eye<cx_mat>(clifford_module.get_matrix_size(), clifford_module.get_matrix_size());
-            for (auto x : comb)
+            for (const auto &x : comb)
             {
                product *= x;
             }

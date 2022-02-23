@@ -1,7 +1,8 @@
-# %% [markdown]
-#  # Average Eigenvalues from Simulation output
-#  The output of the simulation are currently the raw Dirac operators. The spectral properties of the Dirac operators (specific properties of the eigenvalues) are closely related to the geometry they describe. So we would like to measure the eigenvalues from the simulation data.
-#  This is done alone with the autocorelation function of the eigenvalues.
+# %% [markdown] # Average Eigenvalues from Simulation output The output of the simulation are currently the raw Dirac
+# operators. The spectral properties of the Dirac operators (specific properties of the eigenvalues) are closely
+# related to the geometry they describe. So we would like to measure the eigenvalues from the simulation data. This
+# is done alone with the auto-correlation function of the eigenvalues.
+
 # %%
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,7 +10,8 @@ import h5py
 from autocorrelation import *
 # from pyarma import *
 # %%
-f=h5py.File('/Users/pauldruce/Dev/RanNCGinC++/output/Simulation_1_1_N_6/dirac_matrices_1_1_N_6/Dirac_Matrices_1_1_N_6_g2_2.400.h5','r')
+f=h5py.File(
+    "/Users/pauldruce/Dev/RanNCGinC++/output/Simulation_1_1_N_6/dirac_matrices_1_1_N_6/Dirac_Matrices_1_1_N_6_g2_2.400.h5", 'r')
 # %%
 diracs = []
 for i in range(1,2000):
@@ -47,10 +49,10 @@ av_eigenvalues
 acfs = []
 for i in range(len(np_all_eigenvalues[0,:])):
     eigenvalues = np_all_eigenvalues[:,i]
-    acf  = autocorr_func_1d(eigenvalues);
+    acf  = autocorr_func_1d(eigenvalues)
     acfs.append(acf)
 # %%
-x_values =  []
+x_values = []
 for i in range(1,2000):
     x_values.append(i*20)
 # %%

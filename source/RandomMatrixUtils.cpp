@@ -6,11 +6,12 @@
 //
 
 #include "RandomMatrixUtils.h"
-//#include <cassert>
+#include <cassert>
+
 using namespace arma;
 using namespace std;
 
-cx_mat comm(cx_mat& M)
+cx_mat comm(cx_mat &M)
 {
    /*
     * returns the commutator of a matrix as [M,-] = M x I - I x M.T
@@ -25,16 +26,14 @@ cx_mat comm(cx_mat& M)
    {
       cout << "Trying to form commutator with non-square matrix!" << endl;
       cout << "Returning input matrix unchanged." << endl;
-      throw "Input matrix is not square and you can not form commutator with a non-square matrix.";
+      throw runtime_error("Input matrix is not square and you can not form commutator with a non-square matrix.");
    }
 
    cx_mat I = eye<cx_mat>(size(M));
    return kron(M, I) - kron(I, M.st());
-
 }
 
-
-cx_mat anticomm(cx_mat& M)
+cx_mat anticomm(cx_mat &M)
 {
    /*
     * Returns the anti-commutator of an n-by-n complex matrix: {M,-} = M \otimes I + I\otimes M.T
@@ -45,34 +44,34 @@ cx_mat anticomm(cx_mat& M)
     *
     * So this function returns {M,-} = M \otimes I + I \otimes M.T
     */
-   
+
    if (!M.is_square())
    {
       cout << "Trying to form commutator with non-square matrix!" << endl;
       cout << "Returning input matrix unchanged." << endl;
-      throw "Input matrix is not square and you can not form anti-commutator with a non-square matrix.";
+      throw runtime_error("Input matrix is not square and you can not form anti-commutator with a non-square matrix.");
    }
    cx_mat I = eye<cx_mat>(size(M));
    return kron(M, I) + kron(I, M.st());
 }
 
-cx_mat random_complex(int& N)
+cx_mat random_complex(int &N)
 {
-   mat A(N,N,fill::randu);
-   mat B(N,N,fill::randu);
-   
-   // Need elements between [-1,1] and randu gives values between [0,1]
-   A = 2*A - 1;
-   B = 2*B - 1;
+   mat A(N, N, fill::randu);
+   mat B(N, N, fill::randu);
+
+   // Need elements between [-1,1] for both the real and imaginary components, and randu gives values between [0,1]
+   A = 2 * A - 1;
+   B = 2 * B - 1;
    return cx_mat(A, B);
 }
 
-cx_mat random_hermitian(int& N)
-{  
+cx_mat random_hermitian(int &N)
+{
    mat A(N, N, fill::randn);
    mat B(N, N, fill::randn);
    cx_mat C = cx_mat(A, B); // Creates a matrix A + iB
-   
+
    C = C + C.t(); // In Armadillo, t() is the Hermitian transpose (the adjoint) and st() is the ordinary transpose for complex matrices.
 
    assert(C.is_hermitian());

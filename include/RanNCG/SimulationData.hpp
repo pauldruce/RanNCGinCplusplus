@@ -5,8 +5,8 @@
 //  Created by Paul Druce on 29/12/2021.
 //
 
-#ifndef SimulationData_h
-#define SimulationData_h
+#ifndef SimulationData_hpp
+#define SimulationData_hpp
 
 #include <string>
 #include <filesystem>
@@ -25,20 +25,18 @@ struct SimulationData
    double step_size = 0.0;
    double action_value = 0.0;
    double acceptance_rate = 0.0;
-   std::string project_path = "";
-   std::string output_path = "";
-   std::string dirac_folder = "";
-   std::string action_folder = "";
+   std::string project_path;
+   std::string output_path;
+   std::string dirac_folder;
+   std::string action_folder;
 
-//   std::string dataset_group_name = "";
-//   std::string action_dataset_name = "action_values";
-   std::string action_values_filename = "";
-   std::string dirac_dataset_name = "";
-   std::string dirac_hdf_filename = "";
+   std::string action_values_filename;
+   std::string dirac_dataset_name;
+   std::string dirac_hdf_filename;
 
    int dirac_id = 0;
 
-   public:
+public:
    void create_output_dir()
    {
       std::ostringstream ss;
@@ -53,7 +51,10 @@ struct SimulationData
 
    void create_action_folder()
    {
-      if (output_path == "") { create_output_dir(); }
+      if (output_path.empty())
+      {
+         create_output_dir();
+      }
 
       std::ostringstream ss;
       ss << "action_data" << this->p << "_" << this->q << "_N_" << this->matrix_size << "/";
@@ -66,7 +67,10 @@ struct SimulationData
    }
    void create_dirac_dir()
    {
-      if (output_path == "") { create_output_dir(); }
+      if (output_path.empty())
+      {
+         create_output_dir();
+      }
 
       std::ostringstream ss;
       ss << "dirac_matrices_" << this->p << "_" << this->q << "_N_" << this->matrix_size << "/";
@@ -114,7 +118,6 @@ struct SimulationData
       dirac_dataset_name = ss.str();
    }
 
-
    void print_step_size()
    {
       create_output_dir();
@@ -154,9 +157,7 @@ struct SimulationData
       file.close();
    }
 
-
-
-   void print_dirac_op_data(const cx_mat dirac_op)
+   void print_dirac_op_data(const cx_mat &dirac_op)
    {
       create_output_dir();
       create_dirac_dir();
@@ -164,7 +165,6 @@ struct SimulationData
       create_dirac_dataset();
 
       std::string hdf_filepath = dirac_folder + dirac_hdf_filename;
-      std::string dataset_name = dirac_dataset_name;
       dirac_op.save(hdf5_name(hdf_filepath, dirac_dataset_name, hdf5_opts::append));
    }
 };

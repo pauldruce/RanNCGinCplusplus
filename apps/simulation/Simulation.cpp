@@ -1,13 +1,13 @@
 #include <iostream>
 #include <armadillo>
-#include <filesystem>
 #include <string>
-#include <fstream>
 
 #include "Clifford.h"
 #include "DiracOperator.h"
 #include "Simulation.h"
 #include "SimulationData.hpp"
+#include <cassert>
+#include <assert.h>
 
 using namespace arma;
 namespace fs = std::filesystem;
@@ -25,31 +25,32 @@ int main()
    int q = 1;
    Clifford cliff(p, q);
 
-   // Set size of H and L matrices to use.
-   int matrix_size = 8;
-
    // Set up the action parameters
    double g4 = 1.0;
-   double g2 = 0.0;
-   double g2_start = -0.00;
+   double g2;
+   double g2_start;
    double g2_end = -4.0;
    double g2_step = -0.04;
 
    // Set simulation parameters for initial stage of finding an appropriate step size.
    int chain_length = 500;
-   double num_steps = 100;
+   int num_runs_before_reset = 1000;
    bool record_action = false;
    double step_size = 0.01;
-   double minimum_step_size = 1e-5;
 
-   // Initialise step size;
-
-   for (matrix_size = 6; matrix_size < 10; matrix_size++)
+   // Set size of H and L matrices to use.
+   int matrix_size;
+   for (matrix_size = 9; matrix_size < 11; matrix_size++)
    {
 
-      if (matrix_size == 5) { g2_start = -2.52; }
-      if (matrix_size == 6) { g2_start = -3.28;}
-      else { g2_start = -0.00; }
+      if (matrix_size == 9)
+      {
+         g2_start = -2.44;
+      }
+      else
+      {
+         g2_start = -0.00;
+      }
 
       for (g2 = g2_start; g2 > g2_end; g2 += g2_step)
       {
@@ -68,7 +69,6 @@ int main()
          cout << "Simulation parameters: (g2, g4, N) = (" << g2 << "," << g4 << "," << sim_data.matrix_size << ")"
               << std::endl;
 
-         double step_size_diff;
          int num_times_acceptance_ratio_is_okay = 0;
 
          double acceptance_rate_tol = 0.01;
@@ -80,16 +80,16 @@ int main()
                 sim_data.acceptance_rate < acceptance_rate_lower_bound ||
                 num_times_acceptance_ratio_is_okay < 10)
          {
-            if (num_tempering_runs % 2000 == 0)
+            if (num_tempering_runs % num_runs_before_reset == 0) // This is equivalent to 2000*500 = 1,000,000 runs.
             {
                sim_data.step_size = step_size;
                simulation.reset_dirac();
             }
-
-            step_size_diff = 0.1 * sim_data.step_size + minimum_step_size;
-
             // Make sure step_size is positive
             sim_data.step_size = std::abs(sim_data.step_size);
+
+            assert(sim_data.step_size > 1e-12);
+            //            step_size_diff = 0.1 * sim_data.step_size;
 
             sim_data.acceptance_rate = simulation.run_simulation(chain_length, sim_data.step_size, record_action);
             sim_data.action_value = simulation.get_S();
@@ -98,17 +98,21 @@ int main()
                std::cout << "tempering_run = " << num_tempering_runs
                          << ", step_size = " << sim_data.step_size
                          << ", action_val = " << sim_data.action_value
-                         << ", acceptance ration = " << sim_data.acceptance_rate << std::endl;
+                         << ", acceptance ratio = " << sim_data.acceptance_rate << std::endl;
             }
 
-            if (sim_data.acceptance_rate > acceptance_rate_upper_bound)
+            // += weightA * (-0.5 + ar / (n1))
+
+            if (sim_data.acceptance_rate > acceptance_rate_upper_bound or sim_data.acceptance_rate < acceptance_rate_lower_bound)
             {
-               sim_data.step_size += step_size_diff;
+               sim_data.step_size += ((sim_data.acceptance_rate - 0.5) * sim_data.step_size);
+               //               sim_data.step_size += (step_size_diff + minimum_step_size);
             }
-            else if (sim_data.acceptance_rate < acceptance_rate_lower_bound)
-            {
-               sim_data.step_size -= step_size_diff;
-            }
+            //            else if (sim_data.acceptance_rate < acceptance_rate_lower_bound)
+            //            {
+            //               sim_data.step_size += ((sim_data.acceptance_rate - 0.5)*sim_data.step_size);
+            ////                     sim_data.step_size -= (step_size_diff +minimum_step_size);
+            //            }
             else
             {
                num_times_acceptance_ratio_is_okay++;
