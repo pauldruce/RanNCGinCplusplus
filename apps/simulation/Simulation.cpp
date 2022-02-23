@@ -81,7 +81,7 @@ int main()
          {
             if (num_tempering_runs % num_runs_before_reset == 0 or sim_data.step_size < 1e-12)
             {
-               // This occurs if there have been 2000*500 = 1,000,000 runs or if the step size gets too small.
+               // This occurs if there have been a large number of runs (~200,000) runs or if the step size gets too small.
                sim_data.step_size = step_size;
                simulation.reset_dirac();
             }
@@ -112,10 +112,11 @@ int main()
             num_tempering_runs++;
          }
 
-         printf("System has found appropriate step size for configuration.\n");
-         printf("Outputting step size value for configuration.\n");
+         std::cout << "System has found appropriate step size for configuration: "
+                   << sim_data.step_size << std::endl;
+
          sim_data.print_step_size();
-         printf("Running the simulation for 5000 moves to burn in\n");
+         std::cout << "Running the simulation for 5000 moves to burn in." << std::endl;
          sim_data.acceptance_rate = simulation.run_simulation(5000, sim_data.step_size, true);
 
          int num_runs = 2000;
