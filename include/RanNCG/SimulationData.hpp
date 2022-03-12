@@ -25,20 +25,30 @@ struct SimulationData
    double step_size = 0.0;
    double action_value = 0.0;
    double acceptance_rate = 0.0;
+
    std::string project_path;
    std::string output_path;
-   std::string dirac_folder;
-   std::string action_folder;
 
+   std::string action_folder;
    std::string action_values_filename;
+
+   int dirac_id = 0;
+   std::string dirac_folder;
    std::string dirac_dataset_name;
    std::string dirac_hdf_filename;
 
-   int dirac_id = 0;
+   int eigenvalues_id = 0;
+   std::string eigenvalues_folder;
+   std::string eigenvalues_dataset_name;
+   std::string eigenvalues_hdf_filename;
 
 public:
    void create_output_dir()
    {
+      if(!fs::exists(project_path+"/output/"))
+      {
+         fs::create_directory(project_path+"/output/");
+      }
       std::ostringstream ss;
       ss << "/output/"
          << "Simulation_" << this->p << "_" << this->q << "_N_" << this->matrix_size << "/";
@@ -81,6 +91,22 @@ public:
       }
    }
 
+   void create_eigenvalues_dir()
+   {
+      if (output_path.empty())
+      {
+         create_output_dir();
+      }
+
+      std::ostringstream ss;
+      ss << "eigenvalues_" << this->p << "_" << this->q << "_N_" << this->matrix_size << "/";
+      eigenvalues_folder = output_path + ss.str();
+      if (!fs::exists(eigenvalues_folder))
+      {
+         fs::create_directory(eigenvalues_folder);
+      }
+   }
+
    void create_action_filename()
    {
       std::ostringstream ss;
@@ -110,12 +136,32 @@ public:
       return dirac_hdf_filename;
    }
 
+   std::string create_eigenvalues_hdf_filename()
+   {
+      std::ostringstream ss;
+      ss << "Eigenvalues_"
+         << this->p << "_" << this->q
+         << "_N_" << this->matrix_size
+         << std::fixed << std::setprecision(3) << "_g2_" << -1.0 * g2
+         << ".h5";
+      eigenvalues_hdf_filename = ss.str();
+      return eigenvalues_hdf_filename;
+   }
+
    void create_dirac_dataset()
    {
       std::ostringstream ss;
       ss << "/dirac_" << dirac_id;
       dirac_id++;
       dirac_dataset_name = ss.str();
+   }
+
+   void create_eigenvalues_dataset()
+   {
+      std::ostringstream ss;
+      ss << "/eigenvalues_" << eigenvalues_id;
+      eigenvalues_id++;
+      eigenvalues_dataset_name = ss.str();
    }
 
    void print_step_size()
@@ -166,6 +212,30 @@ public:
 
       std::string hdf_filepath = dirac_folder + dirac_hdf_filename;
       dirac_op.save(hdf5_name(hdf_filepath, dirac_dataset_name, hdf5_opts::append));
+   }
+
+   void save_eigenvalues(const cx_mat &dirac_op)
+   {
+      create_output_dir();
+      create_eigenvalues_dir();
+      create_eigenvalues_hdf_filename();
+      create_eigenvalues_dataset();
+
+      std::string hdf_filepath = eigenvalues_folder + eigenvalues_hdf_filename;
+      // get eigenvalue
+      vec eigs;
+      if(!dirac_op.is_hermitian(1e-10))
+      {
+         auto hermit_dirac = dirac_op;
+         hermit_dirac.clean(1e-10);
+         eigs = eig_sym(hermit_dirac);
+      }
+      else
+      {
+         eigs = eig_sym(dirac_op);
+      }
+      // save eigs
+      eigs.save(hdf5_name(hdf_filepath, eigenvalues_dataset_name, hdf5_opts::append));
    }
 };
 

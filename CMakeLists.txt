@@ -39,4 +39,4 @@ add_subdirectory(source)
 add_subdirectory(apps/simulation)
 add_subdirectory(apps/data_analysis)
 
-install(TARGETS Simulation DESTINATION bin)
+install(TARGETS Type11Simulation DESTINATION bin)

@@ -1,9 +1,10 @@
-add_executable(Simulation Simulation.cpp ../../include/RanNCG/SimulationData.hpp)
+add_executable(
+  Type11Simulation Type11Simulation.cpp
+                   ${RandomNCG_SOURCE_DIR}/include/RanNCG/SimulationData.hpp)
 
-#find_package(HDF5 REQUIRED COMPONENTS CXX)
-
-target_link_libraries(Simulation RanNCG)
+target_link_libraries(Type11Simulation RanNCG)
 
 # We need this directory, and users of our library will need it too
 target_include_directories(
-  Simulation PUBLIC ${RandomNCG_SOURCE_DIR}/include/RanNCG/ ${HDF5_INCLUDE_DIR})
+  Type11Simulation PUBLIC ${RandomNCG_SOURCE_DIR}/include/RanNCG/
+                          ${HDF5_INCLUDE_DIR})

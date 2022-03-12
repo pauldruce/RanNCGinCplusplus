@@ -27,7 +27,7 @@ int main()
    // Set up the action parameters
    double g4 = 1.0;
    double g2;
-   double g2_start;
+   double g2_start = -2.12;
    double g2_end = -4.0;
    double g2_step = -0.04;
 
@@ -35,21 +35,12 @@ int main()
    int chain_length = 200;
    int num_runs_before_reset = 1000;
    bool record_action = false;
-   double step_size = 0.01;
+   double step_size = 0.0243381;
 
    // Set size of H and L matrices to use.
    int matrix_size;
-   for (matrix_size = 9; matrix_size < 11; matrix_size++)
+   for (matrix_size = 10; matrix_size < 11; matrix_size++)
    {
-
-      if (matrix_size == 9)
-      {
-         g2_start = -2.44;
-      }
-      else
-      {
-         g2_start = -0.00;
-      }
 
       for (g2 = g2_start; g2 > g2_end; g2 += g2_step)
       {
@@ -126,8 +117,11 @@ int main()
          for (int i = 0; i < num_runs; i++)
          {
             sim_data.acceptance_rate = simulation.run_simulation(num_moves_per_run, sim_data.step_size, true);
-            sim_data.print_dirac_op_data(simulation.get_dirac_op());
+            // sim_data.print_dirac_op_data(simulation.get_dirac_op());
+            sim_data.save_eigenvalues(simulation.get_dirac_op());
          }
+         
+         step_size = sim_data.step_size;
       }
    }
 

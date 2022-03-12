@@ -38,4 +38,5 @@ build/*
 build-xcode/*
 cmake-*
 output/*
+output_old/*
 apps/data_analysis/.ipynb_checkpoints/*
