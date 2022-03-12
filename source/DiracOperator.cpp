@@ -7,7 +7,7 @@
 
 #include "DiracOperator.h"
 #include "RandomMatrixUtils.h"
-#include "cppitertools/combinations.hpp"
+#include "combinations.hpp"
 
 using namespace arma;
 using namespace std;

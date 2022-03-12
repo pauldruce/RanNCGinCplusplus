@@ -25,6 +25,6 @@ public:
 
    [[nodiscard]] inline int get_matrix_size() const { return this->matrix_size; };
    [[nodiscard]] inline int get_number_of_generators() const { return n; };
-   [[nodiscard]] inline int gt_p() const { return p; };
+   [[nodiscard]] inline int get_p() const { return p; };
    [[nodiscard]] inline int get_q() const { return q; };
 };

@@ -25,7 +25,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
   # Testing only available if this is the main app Note this needs to be done in
   # the main CMakeLists since it calls enable_testing, which must be in the main
-  # CMakeLists. include(CTest)
+  # include(CTest)
 endif()
 
 find_package(Armadillo REQUIRED)
@@ -35,8 +35,37 @@ include_directories(${ARMADILLO_INCLUDE_DIRS})
 # ${DEPENDENCIES_DIR}/cppitertools/combinations.hpp)
 # include_directories(${DEPENDENCIES_DIR})
 
+# Get DOCTEST
+include(ExternalProject)
+find_package(Git REQUIRED)
+
+ExternalProject_Add(
+  doctest
+  PREFIX ${CMAKE_BINARY_DIR}/doctest
+  GIT_REPOSITORY https://github.com/doctest/doctest.git
+  TIMEOUT 10
+  UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  LOG_DOWNLOAD ON)
+
+# Expose required variable (DOCTEST_INCLUDE_DIR) to parent scope
+ExternalProject_Get_Property(doctest source_dir)
+set(DOCTEST_INCLUDE_DIR
+    ${source_dir}/doctest
+    CACHE INTERNAL "Path to include folder for doctest")
+
+# Build project library
 add_subdirectory(source)
+
+# Build executables that use library
 add_subdirectory(apps/simulation)
 add_subdirectory(apps/data_analysis)
 
-install(TARGETS Type11Simulation DESTINATION bin)
+# Add tests if building tests.
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
+
+# install(TARGETS Type11Simulation DESTINATION bin)

@@ -15,4 +15,8 @@ target_include_directories(RanNCG PUBLIC ${RandomNCG_SOURCE_DIR}/include/RanNCG/
 
 target_link_libraries(RanNCG PRIVATE ${ARMADILLO_LIBRARIES})
 
-target_include_directories(RanNCG PUBLIC ${RandomNCG_SOURCE_DIR}/dependencies)
+target_include_directories(
+  RanNCG PUBLIC ${RandomNCG_SOURCE_DIR}/dependencies/cppitertools)
+
+target_include_directories(RanNCG
+                           PUBLIC ${RandomNCG_SOURCE_DIR}/dependencies/doctest)
