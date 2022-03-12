@@ -1,3 +1,6 @@
 [submodule "dependencies/cppitertools"]
 	path = dependencies/cppitertools
 	url = https://github.com/ryanhaining/cppitertools
+[submodule "dependencies/doctest"]
+	path = dependencies/doctest
+	url = https://github.com/doctest/doctest.git
