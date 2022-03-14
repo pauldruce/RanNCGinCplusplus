@@ -45,9 +45,9 @@ struct SimulationData
 public:
    void create_output_dir()
    {
-      if(!fs::exists(project_path+"/output/"))
+      if (!fs::exists(project_path + "/output/"))
       {
-         fs::create_directory(project_path+"/output/");
+         fs::create_directory(project_path + "/output/");
       }
       std::ostringstream ss;
       ss << "/output/"
@@ -67,7 +67,7 @@ public:
       }
 
       std::ostringstream ss;
-      ss << "action_data" << this->p << "_" << this->q << "_N_" << this->matrix_size << "/";
+      ss << "action_data_" << this->p << "_" << this->q << "_N_" << this->matrix_size << "/";
       action_folder = output_path + ss.str();
       create_output_dir();
       if (!fs::exists(action_folder))
@@ -224,7 +224,7 @@ public:
       std::string hdf_filepath = eigenvalues_folder + eigenvalues_hdf_filename;
       // get eigenvalue
       vec eigs;
-      if(!dirac_op.is_hermitian(1e-10))
+      if (!dirac_op.is_hermitian(1e-10))
       {
          auto hermit_dirac = dirac_op;
          hermit_dirac.clean(1e-10);

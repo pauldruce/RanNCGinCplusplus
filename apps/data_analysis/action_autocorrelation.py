@@ -4,11 +4,16 @@ import matplotlib.pyplot as plt
 import csv
 import autocorrelation
 # %%
-filename = "/Users/pauldruce/Dev/RanNCGinC++/output/Simulation_1_1_N_6/action_data1_1_N_6/action_data_1_1_N_6_g2_0.000_2022-02-20.csv" 
+output_dir = "/Users/pauldruce/Dev/RanNCGinC++/output/"
+simulation_subdir = "Simulation_1_1_N_6/"
+action_dir = "action_data1_1_N_6/"
+action_file = "action_data_1_1_N_6_g2_0.000_2022-03-06.csv" 
+
+filename = output_dir+simulation_subdir+action_dir+action_file
 # %%
 action_data = []
 with open(filename, 'r') as f:
-    csv_reader = csv.reader(f, delimiter=' ')
+    csv_reader = csv.reader(f, delimiter=',')
     for row in csv_reader:
         action_data.append([float(row[0]),float(row[1])])
 action_data = np.array(action_data)
