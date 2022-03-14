@@ -45,14 +45,31 @@ struct SimulationData
 public:
    void create_output_dir()
    {
-      if (!fs::exists(project_path + "/output/"))
-      {
-         fs::create_directory(project_path + "/output/");
-      }
       std::ostringstream ss;
-      ss << "/output/"
+
+      // Create output dir if need.
+      output_path = project_path + "/output/";
+      if (!fs::exists(output_path))
+      {
+         fs::create_directory(output_path);
+      }
+
+      // Create type folder if needed.
+      ss.str("");
+      ss.clear();
+      ss << output_path << "Type" << this->p << this->q << "/";
+      std::string type_dir = ss.str();
+      if (!fs::exists(type_dir))
+      {
+         fs::create_directory(type_dir);
+      }
+
+      // Create folder for simulation data.
+      ss.str("");
+      ss.clear();
+      ss << type_dir
          << "Simulation_" << this->p << "_" << this->q << "_N_" << this->matrix_size << "/";
-      output_path = project_path + ss.str();
+      output_path = ss.str();
       if (!fs::exists(output_path))
       {
          fs::create_directory(output_path);
@@ -69,7 +86,6 @@ public:
       std::ostringstream ss;
       ss << "action_data_" << this->p << "_" << this->q << "_N_" << this->matrix_size << "/";
       action_folder = output_path + ss.str();
-      create_output_dir();
       if (!fs::exists(action_folder))
       {
          fs::create_directory(action_folder);
@@ -166,7 +182,11 @@ public:
 
    void print_step_size()
    {
-      create_output_dir();
+      if (output_path.empty())
+      {
+         create_output_dir();
+      }
+
       std::ostringstream filename;
       filename << output_path + "/step_sizes_type_" << this->p << "_" << this->q << ".txt";
       // a+ means pointer begins at beginning of file BUT when written to, it will always be at the end of the file.

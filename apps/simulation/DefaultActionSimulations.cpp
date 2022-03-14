@@ -15,19 +15,18 @@ int main()
 {
    // Set the project path
    std::string project_path = "/Users/pauldruce/Dev/RanNCGinC++";
-
    // Initialize the random number generator so that it is actually random.
    arma_rng::set_seed_random();
 
    // Set Clifford type parameters for simulation;
    int p = 1;
-   int q = 1;
+   int q = 3;
    Clifford cliff(p, q);
 
    // Set up the action parameters
    double g4 = 1.0;
    double g2;
-   double g2_start = -2.12;
+   double g2_start = -0.00;
    double g2_end = -4.0;
    double g2_step = -0.04;
 
@@ -39,7 +38,7 @@ int main()
 
    // Set size of H and L matrices to use.
    int matrix_size;
-   for (matrix_size = 10; matrix_size < 11; matrix_size++)
+   for (matrix_size = 4; matrix_size < 11; matrix_size++)
    {
 
       for (g2 = g2_start; g2 > g2_end; g2 += g2_step)
