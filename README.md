@@ -1,6 +1,9 @@
 THIS PROJECT IS NOW ABANDONED.
+
 WHEN CREATING THIS PROJECT I WASN'T AWARE OF: https://github.com/darcangelomauro/RFL
+
 ALL MY EFFORTS WITH BE MADE TO THAT PROJECT. 
+
 TO SEE MY EDITS SEE: https://github.com/pauldruce/RFL
 
 # Random NCG in C++
