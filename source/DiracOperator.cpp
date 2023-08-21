@@ -12,7 +12,7 @@
 using namespace arma;
 using namespace std;
 
-DiracOperator::DiracOperator(Clifford &clifford_module, int &N)
+DiracOperator::DiracOperator(Clifford &clifford_module, int N)
     : clifford_module(clifford_module), matrix_size(N)
 {
    this->dirac_dim = N * N * clifford_module.get_matrix_size();
@@ -37,14 +37,22 @@ DiracOperator::DiracOperator(Clifford &clifford_module, int &N)
       }
    }
    // Pairs to hold the proposed new gamma-H and gamma-L pairs when making Monte Carlo move.
-   gamma_H_pairs_new = gamma_H_pairs;
-   gamma_L_pairs_new = gamma_L_pairs;
+//   gamma_H_pairs_new = gamma_H_pairs;
+//   gamma_L_pairs_new = gamma_L_pairs;
 
    // Set the initial matrix representation of the Dirac to be zero.
    this->dirac_op_mat = zeros<cx_mat>(dirac_dim, dirac_dim);
    random_dirac(1.0);
 
    // this->dirac_op_mat = eye<cx_mat>(dirac_dim, dirac_dim);
+}
+
+std::pair<int, int> DiracOperator::GetType() const
+{
+   int p = this->clifford_module.get_p();
+   int q = this->clifford_module.get_q();
+
+   return std::make_pair(p, q);
 }
 
 void DiracOperator::reset_dirac()

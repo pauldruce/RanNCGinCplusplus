@@ -1,7 +1,8 @@
 #include <iostream>
 #include <armadillo>
-#include <string>
+
 #include <cassert>
+#include <stdexcept>
 
 #include "Clifford.h"
 #include "DiracOperator.h"
@@ -26,20 +27,28 @@ int main()
    // Set up the action parameters
    double g4 = 1.0;
    double g2;
-   double g2_start = -0.00;
+   double g2_start;
    double g2_end = -4.0;
    double g2_step = -0.04;
 
    // Set simulation parameters for initial stage of finding an appropriate step size.
    int chain_length = 200;
-   int num_runs_before_reset = 1000;
+   int num_runs_before_reset = 1500;
    bool record_action = false;
-   double step_size = 0.0243381;
+   double step_size = 0.01725713257499956;
 
    // Set size of H and L matrices to use.
    int matrix_size;
-   for (matrix_size = 4; matrix_size < 11; matrix_size++)
+   for (matrix_size = 6; matrix_size < 11; matrix_size++)
    {
+      if (matrix_size == 6)
+      {
+         g2_start = -2.52;
+      }
+      else
+      {
+         g2_start = -0.0;
+      }
 
       for (g2 = g2_start; g2 > g2_end; g2 += g2_step)
       {
@@ -65,11 +74,13 @@ int main()
          double acceptance_rate_lower_bound = 0.5 * (1.0 - acceptance_rate_tol);
          int num_tempering_runs = 0;
 
+         bool error_free = true;
+
          while (sim_data.acceptance_rate > acceptance_rate_upper_bound ||
                 sim_data.acceptance_rate < acceptance_rate_lower_bound ||
                 num_times_acceptance_ratio_is_okay < 10)
          {
-            if (num_tempering_runs % num_runs_before_reset == 0 or sim_data.step_size < 1e-12)
+            if (num_tempering_runs % num_runs_before_reset == 0)
             {
                // This occurs if there have been a large number of runs (~200,000) runs or if the step size gets too small.
                sim_data.step_size = step_size;
@@ -78,7 +89,12 @@ int main()
             // Make sure step_size is positive
             sim_data.step_size = std::abs(sim_data.step_size);
 
-            assert(sim_data.step_size > 1e-12);
+            if (sim_data.step_size < 1e-11)
+            {
+               sim_data.log_error();
+               error_free = false;
+               break;
+            }
 
             sim_data.acceptance_rate = simulation.run_simulation(chain_length, sim_data.step_size, record_action);
             sim_data.action_value = simulation.get_S();
@@ -100,6 +116,12 @@ int main()
             }
 
             num_tempering_runs++;
+         }
+
+         if (!error_free)
+         {
+            std::cout << "Error has occurred for this value of g2, please check the error log." << std::endl;
+            continue;
          }
 
          std::cout << "System has found appropriate step size for configuration: "

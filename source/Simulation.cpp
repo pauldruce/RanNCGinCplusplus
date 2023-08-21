@@ -58,7 +58,7 @@ void Simulation::Metropolis()
    double p = randu();
 
    // This is my understanding of the Metropolis-Hastings algorithm
-   if (S_new < this->action_val or rand_press > p)
+   if (S_new < this->action_val || rand_press > p)
    {
       D = proposed_D;
       this->action_val = S_new;
@@ -76,7 +76,7 @@ void Simulation::Metropolis()
 double Simulation::Action(DiracOperator &dirac) const
 {
    // Currently, using D matrix. Need to migrate to H and L matrices.
-   cx_mat D_mat = dirac.as_matrix();
+   const cx_mat& D_mat = dirac.as_matrix();
    cx_mat D2 = D_mat * D_mat;
    assert(norm(D2) > 1e-10);
 

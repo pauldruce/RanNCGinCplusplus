@@ -1,6 +1,6 @@
 add_executable(
   DefaultActionSimulations
-  DefaultActionSimulations.cpp
+  DefaultActionSimulations.cpp Type11Simulation.hpp
   ${RandomNCG_SOURCE_DIR}/include/RanNCG/SimulationData.hpp)
 
 target_link_libraries(DefaultActionSimulations RanNCG)

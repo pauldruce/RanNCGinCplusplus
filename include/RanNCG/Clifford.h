@@ -21,8 +21,9 @@ public:
    arma::cx_mat chirality;
    std::pair<int, int> type;
    virtual void introduce();
-   arma::cx_mat get_chirality();
 
+
+   [[nodiscard]] arma::cx_mat get_chirality() const ;
    [[nodiscard]] inline int get_matrix_size() const { return this->matrix_size; };
    [[nodiscard]] inline int get_number_of_generators() const { return n; };
    [[nodiscard]] inline int get_p() const { return p; };

@@ -40,3 +40,7 @@ cmake-*
 output/*
 output_old/*
 apps/data_analysis/.ipynb_checkpoints/*
+/build/
+/build-xcode/
+/output/
+.DS_Store

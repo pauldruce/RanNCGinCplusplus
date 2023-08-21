@@ -11,7 +11,7 @@ This is the starting idea of noncommutative geometry, and a number of different 
 
 One of the approached is that we change the space of continuous functions over a space to a new space that no longer is commutative.
 For instance, the x-position and the y-position are functions of a space, i.e. $\hat{x}(p)= p_x$, where $p$ is a point on the space.
-So if we now say that $[\hat{x}, \hat{y}] \new 0$, then this introduces the desired uncertainty principle between the $x$ and $y$ coordinates.
+So if we now say that $[\hat{x}, \hat{y}] \neq 0$, then this introduces the desired uncertainty principle between the $x$ and $y$ coordinates.
 
 So the scheme that the paper and thesis above are based upon, is the idea that the space of functions of a geometry are replaced with a finite matrix algebra.
 This has deeper justifications (again see my thesis or the paper), and there exists a complete characterisation of the allowed noncommutative geometries with such a matrix algebra for the function space.

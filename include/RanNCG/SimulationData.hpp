@@ -43,6 +43,36 @@ struct SimulationData
    std::string eigenvalues_hdf_filename;
 
 public:
+   void log_error()
+   {
+      if (output_path.empty())
+      {
+         create_output_dir();
+      }
+
+      std::ostringstream filename;
+      filename << output_path + "/error_log_" << this->p << "_" << this->q << ".txt";
+      // a+ means pointer begins at beginning of file BUT when written to, it will always be at the end of the file.
+      // Using a+ because I may want to search and update values.
+      std::fstream file;
+      file.precision(17);
+      file.open(filename.str(), ios::in | ios::out | ios::app);
+      if (!file.is_open())
+      {
+         std::cout << "ERROR: Failed to open file with name '" << filename.str() << "'\n";
+         return;
+      }
+      file  << "The following simulation failed:"
+            << std::fixed << std::setprecision(3) 
+            << " g2 = "<<this->g2 << ","
+            << " N =  " << this->matrix_size << ","
+            << std::fixed << std::setprecision(17) 
+            << "step size = " << this->step_size << std::endl;
+      file.close();
+
+
+   }
+
    void create_output_dir()
    {
       std::ostringstream ss;

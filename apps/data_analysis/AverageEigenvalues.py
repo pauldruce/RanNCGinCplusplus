@@ -5,7 +5,6 @@
 # is done alone with the auto-correlation function of the eigenvalues.
 
 # %%
-import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 from autocorrelation import *
@@ -18,7 +17,7 @@ g2end = -4.000
 g2step = -0.04
 g2values = []
 g2 = g2start
-while(g2>g2end):
+while g2>g2end:
     g2values.append(g2)
     g2+= g2step
 

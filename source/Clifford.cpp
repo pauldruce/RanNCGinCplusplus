@@ -25,7 +25,7 @@ Clifford::Clifford(int p, int q)
  We can then calculate the Chirality operator using: chirality = i^{s(s+1)/2}
  gamma^1 gamma^2 ... gamma^n
  */
-cx_mat Clifford::get_chirality()
+cx_mat Clifford::get_chirality() const
 {
    cx_mat c;
    c = eye<cx_mat>(matrix_size, matrix_size);

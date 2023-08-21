@@ -2,15 +2,14 @@
 #include <armadillo>
 #include <filesystem>
 #include <string>
-#include <fstream>
 
-#include "Clifford.h"
-#include "DiracOperator.h"
-#include "Simulation.h"
+//#include "Clifford.h"
+//#include "DiracOperator.h"
+//#include "Simulation.h"
 
 #define PROJECT_PATH "/Users/pauldruce/Dev/RanNCGinC++"
 
-std::vector<arma::cx_mat> LoadDiracOperators(std::string filename, std::string data_set_name)
+std::vector<arma::cx_mat> LoadDiracOperators(const std::string& filename, const std::string& data_set_name)
 {
     std::vector<arma::cx_mat> dirac_opts;
     arma::cx_mat op;
@@ -29,7 +28,7 @@ std::vector<arma::cx_mat> LoadDiracOperators(std::string filename, std::string d
     return dirac_opts;
 }
 
-int main(int argc, char **argv)
+int main()
 {
     // Load dirac operators
     double g2 = 0.0;

@@ -14,6 +14,25 @@
 
 class DiracOperator
 {
+public:
+   DiracOperator(Clifford &clifford_module, int N);
+   //   void update();
+   // Returns a random Dirac operator with entries uniformly sampled between [-1,1] + i[-1,1].
+   void random_dirac(double step_size);
+
+   DiracOperator &operator+=(DiracOperator &D_right);
+
+   [[nodiscard]] std::pair<int, int> GetType() const;
+
+   //   inline int get_dirac_dim() { return dirac_dim; };
+   [[nodiscard]] inline const arma::cx_mat &as_matrix() const { return dirac_op_mat; };
+   [[nodiscard]] inline int get_matrix_size() const { return matrix_size; };
+   [[nodiscard]] inline const std::vector<arma::cx_mat> &get_odd_gamma_products() const { return odd_gamma_products; };
+   [[nodiscard]] inline const std::vector<std::pair<arma::cx_mat, arma::cx_mat>> &get_anti_herm_pairs() const { return gamma_L_pairs; };
+   [[nodiscard]] inline const std::vector<std::pair<arma::cx_mat, arma::cx_mat>> &get_herm_pairs() const { return gamma_H_pairs; };
+   void reset_dirac();
+   // inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> get_gamma_HL_pairs(){return gamma_HL_pairs;};
+
 private:
    Clifford clifford_module;
    // The size of the matrices inside the commutators and anti-commutators.
@@ -35,23 +54,6 @@ private:
    // Pairs of anti-hermitian gamma products and anti-hermitian matrices;
    std::vector<std::pair<arma::cx_mat, arma::cx_mat>> gamma_L_pairs;
    std::vector<std::pair<arma::cx_mat, arma::cx_mat>> gamma_L_pairs_new;
-
-public:
-   DiracOperator(Clifford &clifford_module, int &N);
-   //   void update();
-   // Returns a random Dirac operator with entries uniformly sampled between [-1,1] + i[-1,1].
-   void random_dirac(double step_size);
-
-   DiracOperator &operator+=(DiracOperator &D_right);
-
-   //   inline int get_dirac_dim() { return dirac_dim; };
-   inline arma::cx_mat &as_matrix() { return dirac_op_mat; };
-   [[nodiscard]] inline int get_matrix_size() const { return matrix_size; };
-   inline std::vector<arma::cx_mat> &get_odd_gamma_products() { return odd_gamma_products; };
-   inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> &get_anti_herm_pairs() { return gamma_L_pairs; };
-   inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> &get_herm_pairs() { return gamma_H_pairs; };
-   void reset_dirac();
-   // inline std::vector<std::pair<arma::cx_mat, arma::cx_mat>> get_gamma_HL_pairs(){return gamma_HL_pairs;};
 };
 
 #endif /* DiracOperator_h */
